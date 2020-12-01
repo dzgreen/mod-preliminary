@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>MOD</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="icon" href="favicon.ico" type="image/x-icon" />
+    <script src="https://js.stripe.com/v3/"></script>
+  </head>
+  <body>
+    <div class="flex flex-col h-screen justify-between">
+      <header class="p-2"></header>
+
+      <div class="flex justify-center">
+        <main class="flex flex-col justify-center space-y-16">
+          <div class="container flex px-5 items-center justify-center flex-col">
+            <div class="text-center lg:w-2/3">
+              <h1 class="sm:text-4xl text-3xl mb-4 text-gray-900 font-extrabold tracking-tight">Mercy Outreach</h1>
+              <p class="prose mb-8 leading-relaxed">Vi er på vej med en ny hjemmeside. I mellemtiden er det muligt at blive medlem og donere her:</p>
+              <div class="flex justify-center btn-group flex-col">
+                <button type="button" class="lg:mx-24 m-4 text-white bg-red-400 border-0 py-2 px-4 focus:outline-none hover:bg-red-600 rounded text-lg" data-checkout-mode="subscription" data-price-id="prod_IRHq23MnsUpNep">
+                  Membership <br />
+                  DKK 100 per year
+                </button>
+
+                <button type="button" class="lg:mx-24 m-4 text-gray-700 bg-gray-200 border-0 py-2 px-4 focus:outline-none hover:bg-gray-300 rounded text-lg" data-checkout-mode="payment" data-price-id="prod_IUexJR6gTSvHoN">
+                  Donation <br />
+                  DKK 200 once
+                </button>
+              </div>
+              <div id="error-message"></div>
+            </div>
+          </div>
+          <div class="container justify-center flex flex-col items-center text-gray-700 body-font">
+            <div class="flex flex-col justify-center border-4 rounded">
+              <div class="flex justify-center lg:mx-24">
+                <p class="py-2">Pr. 18 Nov 2020</p>
+              </div>
+              <div class="flex flex-wrap">
+                <div class="p-2 w-32 sm:w-1/2 px-12">
+                  <h2 class="title-font font-medium sm:text-4xl text-3xl text-gray-900">167</h2>
+                  <p class="leading-relaxed">Members</p>
+                </div>
+
+                <div class="p-2 w-32 sm:w-1/2 px-12">
+                  <h2 class="title-font font-medium sm:text-4xl text-3xl text-gray-900">70</h2>
+                  <p class="leading-relaxed">Givers</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </main>
+
+        <div class="progress"></div>
+      </div>
+
+      <footer>
+        <div class="flex justify-center space-x-4">
+          <div class="flex justify-center">
+            <div class="container px-3 py-3 mx-auto flex items-center flex-col">
+              <span class="inline-flex justify-center">
+                <small class="text-gray-500"> <a href="/terms.html">Terms&nbsp;&nbsp;</a><a href="/privacy.html">|&nbsp;&nbsp;Privacy</a></small>
+              </span>
+            </div>
+            <div class="container px-3 py-3 mx-auto flex items-center flex-col">
+              <span class="inline-flex justify-center">
+                <a class="text-gray-500" href="/terms.html">
+                  <p></p>
+                </a>
+              </span>
+            </div>
+            <div class="container px-3 py-3 mx-auto flex items-center flex-col">
+              <span class="inline-flex justify-center">
+                <a class="text-gray-500" href="https://www.facebook.com/MercyOutreachDanmark">
+                  <svg fill="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-5 h-5" viewBox="0 0 24 24">
+                    <path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"></path>
+                  </svg>
+                </a>
+
+                <a class="ml-3 text-gray-500" href="https://www.instagram.com/mercyoutreachdk/">
+                  <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-5 h-5" viewBox="0 0 24 24">
+                    <rect width="20" height="20" x="2" y="2" rx="5" ry="5"></rect>
+                    <path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37zm1.5-4.87h.01"></path>
+                  </svg>
+                </a>
+              </span>
+            </div>
+          </div>
+        </div>
+      </footer>
+    </div>
+
+    <script>
+      // Replace with your own publishable key: https://dashboard.stripe.com/test/apikeys
+      var PUBLISHABLE_KEY = "pk_test_cGJ6wMor225dL3opOqbpI27j";
+      // Replace with the domain you want your users to be redirected back to after payment
+      var DOMAIN = location.href.replace(/[^/]*$/, "");
+
+      if (PUBLISHABLE_KEY === "pk_test_Tr8olTkdFnnJVywwhNPHwnHK00HkHV4tnP") {
+        console.log("Replace the hardcoded publishable key with your own publishable key: https://dashboard.stripe.com/test/apikeys");
+      }
+
+      var stripe = Stripe(PUBLISHABLE_KEY);
+
+      // Handle any errors from Checkout
+      var handleResult = function (result) {
+        if (result.error) {
+          var displayError = document.getElementById("error-message");
+          displayError.textContent = result.error.message;
+        }
+      };
+
+      document.querySelectorAll("button").forEach(function (button) {
+        button.addEventListener("click", function (e) {
+          var mode = e.target.dataset.checkoutMode;
+          var priceId = e.target.dataset.priceId;
+          var items = [{ price: priceId, quantity: 1 }];
+
+          // Make the call to Stripe.js to redirect to the checkout page
+          // with the sku or plan ID.
+          stripe
+            .redirectToCheckout({
+              mode: mode,
+              lineItems: items,
+              successUrl: DOMAIN + "success.html?session_id={CHECKOUT_SESSION_ID}",
+              cancelUrl: DOMAIN + "canceled.html?session_id={CHECKOUT_SESSION_ID}",
+            })
+            .then(handleResult);
+        });
+      });
+    </script>
+  </body>
+</html>
