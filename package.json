@@ -1,12 +1,12 @@
 {
-  "name": "https://mercyoutreach.netlify.app/",
+  "name": "modwebsite",
   "version": "1.0.0",
   "description": "mod tentative website",
   "main": "index.html",
   "scripts": {
-    "//": " --- BUILD (GENERIC) --- ",
     "copy:html": "cp -r src/*.html dist",
     "copy:ico": "cp -r src/*.ico dist",
+    "clear": "rm -rf dist/*",
     "copy": "npm run copy:ico && npm run copy:html",
     "build": "NODE_ENV=production npx tailwindcss-cli@latest build ./src/styles.css -o ./dist/styles.css",
     "test": "echo \"Error: no test specified\" && exit 1"
