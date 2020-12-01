@@ -4,7 +4,7 @@
   "description": "mod tentative website",
   "main": "index.html",
   "scripts": {
-    "deploy": "npm run build && git",
+    "deploy": "npm run build && git add . && git commit -m 'deploy' && git push",
     "copy:html": "cp -r src/*.html dist",
     "copy:ico": "cp -r src/*.ico dist",
     "copy": "npm run copy:ico && npm run copy:html",
